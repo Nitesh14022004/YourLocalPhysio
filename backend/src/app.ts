@@ -57,6 +57,19 @@ export function createApp() {
 
   app.use(express.json());
 
+  app.get("/", (_req, res) => {
+    return res.status(200).json({
+      message: "YourLocalPhysio API Server",
+      version: "1.0.0",
+      status: "running",
+      endpoints: {
+        health: "/health",
+        bookings: "/api/appointments",
+        admin: "/api/admin/appointments",
+      },
+    });
+  });
+
   app.get("/health", (_req, res) => {
     return res.status(200).json({ status: "ok" });
   });
