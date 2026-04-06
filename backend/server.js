@@ -25,6 +25,3 @@ process.on("SIGTERM", () => {
 		console.log("HTTP server closed");
 	});
 });
-	console.error("Failed to start combined server", error);
-	process.exit(1);
-});
