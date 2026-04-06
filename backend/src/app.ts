@@ -42,6 +42,22 @@ export function createApp() {
   app.use(cors());
   app.use(express.json());
 
+  app.get("/", (_req, res) => {
+    return res.status(200).json({
+      service: "YourLocalPhysio API",
+      status: "ok",
+      endpoints: {
+        appointments: "/api/appointments",
+        adminLogin: "/api/admin/login",
+        health: "/health",
+      },
+    });
+  });
+
+  app.get("/health", (_req, res) => {
+    return res.status(200).json({ status: "ok" });
+  });
+
   app.get("/api/appointments", async (req, res) => {
     const dateParam = req.query.date;
 
