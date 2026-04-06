@@ -1,4 +1,7 @@
-export const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+const configuredBaseUrl = process.env.NEXT_PUBLIC_API_URL?.trim() || "";
+export const BASE_URL = configuredBaseUrl.endsWith("/")
+  ? configuredBaseUrl.slice(0, -1)
+  : configuredBaseUrl;
 
 type ApiFetchOptions = RequestInit & {
   skipUnauthorizedRedirect?: boolean;

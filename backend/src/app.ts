@@ -39,20 +39,23 @@ function requireAdminAuth(req: express.Request, res: express.Response, next: exp
 
 export function createApp() {
   const app = express();
-  app.use(cors());
-  app.use(express.json());
 
-  app.get("/", (_req, res) => {
-    return res.status(200).json({
-      service: "YourLocalPhysio API",
-      status: "ok",
-      endpoints: {
-        appointments: "/api/appointments",
-        adminLogin: "/api/admin/login",
-        health: "/health",
-      },
-    });
-  });
+  const corsOrigin = process.env.CORS_ORIGIN?.trim();
+  const shouldEnableCors = process.env.NODE_ENV !== "production" || Boolean(corsOrigin);
+
+  if (shouldEnableCors) {
+    app.use(
+      cors(
+        corsOrigin
+          ? {
+              origin: corsOrigin,
+            }
+          : undefined,
+      ),
+    );
+  }
+
+  app.use(express.json());
 
   app.get("/health", (_req, res) => {
     return res.status(200).json({ status: "ok" });

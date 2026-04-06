@@ -5,14 +5,19 @@
   "type": "module",
   "scripts": {
     "dev": "tsx watch src/index.ts",
-    "build": "tsc",
+    "build": "npm run build:api && npm run build:web",
+    "build:api": "tsc",
+    "build:web": "npm --prefix ../frontend install && npm --prefix ../frontend run build",
     "start": "node server.js"
   },
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.21.0",
-    "pg": "^8.13.0"
+    "next": "16.2.2",
+    "pg": "^8.13.0",
+    "react": "19.2.4",
+    "react-dom": "19.2.4"
   },
   "devDependencies": {
     "@types/cors": "^2.8.17",
