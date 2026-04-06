@@ -40,20 +40,40 @@ function requireAdminAuth(req: express.Request, res: express.Response, next: exp
 export function createApp() {
   const app = express();
 
-  const corsOrigin = process.env.CORS_ORIGIN?.trim();
-  const shouldEnableCors = process.env.NODE_ENV !== "production" || Boolean(corsOrigin);
+  const configuredOrigins = (process.env.CORS_ORIGIN ?? "")
+    .split(",")
+    .map((origin) => origin.trim())
+    .filter(Boolean);
+  const allowVercelPreviewDomains = process.env.ALLOW_VERCEL_PREVIEW_DOMAINS === "true";
 
-  if (shouldEnableCors) {
-    app.use(
-      cors(
-        corsOrigin
-          ? {
-              origin: corsOrigin,
-            }
-          : undefined,
-      ),
-    );
-  }
+  app.use(
+    cors({
+      origin: (origin, callback) => {
+        // Allow server-to-server calls or non-browser clients without Origin.
+        if (!origin) {
+          return callback(null, true);
+        }
+
+        if (configuredOrigins.length === 0 && process.env.NODE_ENV !== "production") {
+          return callback(null, true);
+        }
+
+        if (configuredOrigins.includes(origin)) {
+          return callback(null, true);
+        }
+
+        if (allowVercelPreviewDomains && /^https:\/\/[a-z0-9-]+\.vercel\.app$/i.test(origin)) {
+          return callback(null, true);
+        }
+
+        return callback(new Error(`CORS blocked for origin: ${origin}`));
+      },
+      methods: ["GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS"],
+      allowedHeaders: ["Content-Type", "Authorization"],
+    }),
+  );
+
+  app.options("*", cors());
 
   app.use(express.json());
 
