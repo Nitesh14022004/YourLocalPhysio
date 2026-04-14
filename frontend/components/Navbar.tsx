@@ -1,5 +1,8 @@
 "use client";
 
+import { useSiteContent } from "@/components/SiteContentProvider";
+import { trackEvent } from "@/lib/analytics";
+import Image from "next/image";
 import Link from "next/link";
 import { useCallback, useState } from "react";
 
@@ -12,6 +15,7 @@ const navLinks = [
 ] as const;
 
 export function Navbar() {
+  const { content } = useSiteContent();
   const [open, setOpen] = useState(false);
 
   const closeMenu = useCallback(() => {
@@ -26,10 +30,21 @@ export function Navbar() {
           className="flex shrink-0 items-center gap-2 text-lg font-semibold tracking-tight text-slate-900"
           onClick={closeMenu}
         >
-          <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-600 text-sm font-bold text-white">
-            YL
-          </span>
-          <span className="hidden sm:inline">Your Local Physio</span>
+          {content.logoImageUrl ? (
+            <Image
+              src={content.logoImageUrl}
+              alt={`${content.siteName} logo`}
+              width={36}
+              height={36}
+              unoptimized
+              className="h-9 w-9 rounded-lg border border-slate-200 object-cover"
+            />
+          ) : (
+            <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-600 text-sm font-bold text-white">
+              {content.logoText}
+            </span>
+          )}
+          <span className="hidden sm:inline">{content.siteName}</span>
         </Link>
 
         <nav
@@ -50,15 +65,22 @@ export function Navbar() {
         <div className="flex items-center gap-3">
           <Link
             href="/admin/login"
+            prefetch={false}
             className="hidden rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-100 hover:text-slate-900 sm:inline-flex"
-            onClick={closeMenu}
+            onClick={() => {
+              trackEvent("admin_link_click", { location: "navbar_desktop" });
+              closeMenu();
+            }}
           >
             Admin
           </Link>
           <Link
             href="/book"
             className="hidden rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-blue-700 sm:inline-flex"
-            onClick={closeMenu}
+            onClick={() => {
+              trackEvent("book_cta_click", { location: "navbar_desktop" });
+              closeMenu();
+            }}
           >
             Book Home Visit
           </Link>
@@ -123,15 +145,22 @@ export function Navbar() {
           ))}
           <Link
             href="/admin/login"
+            prefetch={false}
             className="rounded-lg border border-slate-200 px-3 py-3 text-base font-medium text-slate-800 hover:bg-slate-50"
-            onClick={closeMenu}
+            onClick={() => {
+              trackEvent("admin_link_click", { location: "navbar_mobile" });
+              closeMenu();
+            }}
           >
             Admin
           </Link>
           <Link
             href="/book"
             className="mt-2 rounded-lg bg-blue-600 px-4 py-3 text-center text-base font-semibold text-white hover:bg-blue-700"
-            onClick={closeMenu}
+            onClick={() => {
+              trackEvent("book_cta_click", { location: "navbar_mobile" });
+              closeMenu();
+            }}
           >
             Book Home Visit
           </Link>

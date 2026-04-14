@@ -1,33 +1,7 @@
 "use client";
 
+import { useSiteContent } from "@/components/SiteContentProvider";
 import { useCallback, useRef } from "react";
-
-const testimonials = [
-  {
-    name: "Margaret T.",
-    text: "After my hip replacement, home visits made recovery so much easier. Professional, kind, and always on time.",
-  },
-  {
-    name: "James K.",
-    text: "No more struggling to get to a clinic. My back pain is finally under control with exercises I can do at home.",
-  },
-  {
-    name: "Priya S.",
-    text: "The physiotherapist explained everything clearly and adapted each session to my living space. Highly recommend.",
-  },
-  {
-    name: "David R.",
-    text: "Excellent care for my elderly father. Patient, respectful, and we’ve seen real improvement in his mobility.",
-  },
-  {
-    name: "Elena M.",
-    text: "From booking to treatment, the whole experience was smooth. Five stars for the home visit service.",
-  },
-  {
-    name: "Tom W.",
-    text: "Clear treatment plan, gentle hands-on work, and follow-ups that actually fit my schedule.",
-  },
-] as const;
 
 function StarRating() {
   return (
@@ -48,6 +22,7 @@ function StarRating() {
 }
 
 export function Testimonials() {
+  const { content } = useSiteContent();
   const scrollerRef = useRef<HTMLDivElement>(null);
 
   const scrollByDirection = useCallback((direction: "left" | "right") => {
@@ -99,9 +74,9 @@ export function Testimonials() {
             ref={scrollerRef}
             className="flex min-w-0 flex-1 snap-x snap-mandatory gap-6 overflow-x-auto scroll-smooth pb-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
           >
-            {testimonials.map((item) => (
+            {content.testimonials.map((item, index) => (
               <article
-                key={item.name}
+                key={`${item.name}-${index}`}
                 data-testimonial-card
                 className="flex w-[min(85vw,320px)] shrink-0 snap-start flex-col rounded-xl border border-slate-200 bg-white p-6 shadow-sm md:w-[calc((100%-3rem)/3.15)]"
               >

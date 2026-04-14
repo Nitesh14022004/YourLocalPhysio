@@ -1,22 +1,41 @@
 "use client";
 
 import { BASE_URL, apiFetch } from "@/lib/api";
+import { useRouter } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
 
 const ADMIN_TOKEN_KEY = "admin-token";
-const ADMIN_TOKEN_VALUE = "admin-token";
 
 export default function AdminLoginPage() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  const router = useRouter();
   useEffect(() => {
     const token = window.localStorage.getItem(ADMIN_TOKEN_KEY);
-    if (token === ADMIN_TOKEN_VALUE) {
-      window.location.href = "/admin";
+
+    if (!token) {
+      return;
     }
-  }, []);
+
+    const verifySession = async () => {
+      try {
+        const response = await apiFetch(`${BASE_URL}/api/admin/session`, {
+          method: "GET",
+          skipUnauthorizedRedirect: true,
+        });
+
+        if (response.ok) {
+          router.replace("/admin");
+        }
+      } catch {
+        window.localStorage.removeItem(ADMIN_TOKEN_KEY);
+      }
+    };
+
+    void verifySession();
+  }, [router]);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -35,13 +54,13 @@ export default function AdminLoginPage() {
         | null;
 
       if (!response.ok || !data?.success || !data.token) {
-        throw new Error("Invalid password");
+        throw new Error(data?.message || "Invalid password");
       }
 
       window.localStorage.setItem(ADMIN_TOKEN_KEY, data.token);
-      window.location.href = "/admin";
-    } catch {
-      setError("Invalid password");
+      router.replace("/admin");
+    } catch (error) {
+      setError(error instanceof Error ? error.message : "Invalid password");
     } finally {
       setLoading(false);
     }

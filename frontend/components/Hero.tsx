@@ -1,29 +1,43 @@
+"use client";
+
+import { useSiteContent } from "@/components/SiteContentProvider";
+import { trackEvent } from "@/lib/analytics";
 import Link from "next/link";
 
 export function Hero() {
+  const { content } = useSiteContent();
+
   return (
-    <section className="bg-gradient-to-b from-sky-50 to-white">
+    <section className="animate-fade-in-section relative overflow-hidden bg-gradient-to-b from-sky-50 to-white">
+      <div className="pointer-events-none absolute -left-24 top-8 h-64 w-64 rounded-full bg-blue-200/30 blur-3xl" />
+      <div className="pointer-events-none absolute -right-20 bottom-8 h-56 w-56 rounded-full bg-emerald-200/30 blur-3xl" />
       <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
         <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
           <div className="text-center lg:text-left">
             <h1 className="text-balance text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl lg:text-5xl">
-              Expert Physiotherapy at Your Home
+              {content.heroTitle}
             </h1>
-            <p className="mx-auto mt-5 max-w-xl text-lg text-slate-600 lg:mx-0 lg:text-xl">
-              Personalized treatment without hospital visits
+            <p className="mx-auto mt-5 max-w-xl text-lg leading-relaxed text-slate-600 lg:mx-0 lg:text-xl">
+              {content.heroSubtitle}
             </p>
             <div className="mt-8 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:justify-center lg:justify-start">
               <Link
                 href="/book"
-                className="inline-flex items-center justify-center rounded-lg bg-blue-600 px-6 py-3.5 text-base font-semibold text-white shadow-md transition-colors hover:bg-blue-700"
+                onClick={() => {
+                  trackEvent("book_cta_click", { location: "hero" });
+                }}
+                className="hover-lift inline-flex items-center justify-center rounded-lg bg-blue-600 px-6 py-3.5 text-base font-semibold text-white shadow-md transition-colors hover:bg-blue-700"
               >
                 Book Appointment
               </Link>
               <a
-                href="tel:+441234567890"
-                className="inline-flex items-center justify-center rounded-lg border-2 border-blue-600 bg-white px-6 py-3.5 text-base font-semibold text-blue-700 transition-colors hover:bg-blue-50"
+                href={`tel:${content.primaryPhone}`}
+                onClick={() => {
+                  trackEvent("click_to_call", { location: "hero", phone: content.primaryPhone });
+                }}
+                className="hover-lift inline-flex items-center justify-center rounded-lg border-2 border-blue-600 bg-white px-6 py-3.5 text-base font-semibold text-blue-700 transition-colors hover:bg-blue-50"
               >
-                Call Now
+                Call: {content.primaryPhone}
               </a>
             </div>
           </div>

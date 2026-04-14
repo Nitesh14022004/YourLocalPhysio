@@ -118,6 +118,40 @@ export function AdminTable() {
     }
   };
 
+  const deleteAppointment = async (id: string, patientName: string) => {
+    const shouldDelete = window.confirm(`Delete appointment for ${patientName}? This cannot be undone.`);
+
+    if (!shouldDelete) {
+      return;
+    }
+
+    const previousAppointments = appointments;
+    setErrorMessage("");
+    setLoadingId(id);
+    setAppointments((prev) => prev.filter((appointment) => appointment.id !== id));
+
+    try {
+      const response = await apiFetch(`${BASE_URL}/api/admin/appointments/${id}`, {
+        method: "DELETE",
+      });
+
+      const data = (await response.json().catch(() => null)) as unknown;
+
+      if (!response.ok) {
+        const message =
+          data && typeof data === "object" && "message" in data && typeof data.message === "string"
+            ? data.message
+            : "Failed to delete appointment.";
+        throw new Error(message);
+      }
+    } catch (error) {
+      setAppointments(previousAppointments);
+      setErrorMessage(error instanceof Error ? error.message : "Failed to delete appointment.");
+    } finally {
+      setLoadingId(null);
+    }
+  };
+
   return (
     <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-6 lg:p-8">
       <div className="mb-6 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
@@ -167,6 +201,9 @@ export function AdminTable() {
                 <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
                   Status
                 </th>
+                <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
+                  Actions
+                </th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-200 bg-white">
@@ -206,6 +243,18 @@ export function AdminTable() {
                           ))}
                         </select>
                       </div>
+                    </td>
+                    <td className="px-4 py-4">
+                      <button
+                        type="button"
+                        disabled={loadingId === appointment.id}
+                        onClick={() => {
+                          void deleteAppointment(appointment.id, appointment.name);
+                        }}
+                        className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm font-semibold text-red-700 transition hover:bg-red-100 disabled:cursor-not-allowed disabled:opacity-70"
+                      >
+                        Delete
+                      </button>
                     </td>
                   </tr>
                 );

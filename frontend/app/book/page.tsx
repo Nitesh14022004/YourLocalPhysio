@@ -17,6 +17,9 @@ export default function BookPage() {
             <p className="text-base leading-7 text-slate-600 sm:text-lg">
               Choose your preferred date and time, then share a few details so we can prepare for your session.
             </p>
+            <p className="text-sm text-slate-500">
+              After booking, you will get a secure link to reschedule or cancel anytime.
+            </p>
           </div>
 
           <BookingForm />
