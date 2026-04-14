@@ -80,7 +80,7 @@ function normalizeTestimonials(value: unknown): Testimonial[] {
     .filter((item): item is Testimonial => item !== null)
     .slice(0, 10);
 
-  return cleaned.length > 0 ? cleaned : defaultSiteContent.testimonials;
+  return cleaned;
 }
 
 export function normalizeSiteContent(input: unknown): SiteContent {

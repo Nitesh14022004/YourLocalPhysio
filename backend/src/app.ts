@@ -27,6 +27,7 @@ const bruteForceLockMs = 1000 * 60 * 15;
 const loginRateWindowByKey = new Map<string, { windowStartedAt: number; count: number }>();
 const loginFailureStateByKey = new Map<string, { failures: number; lockUntil: number }>();
 let appointmentsSourceColumnCached: boolean | null = null;
+let reviewsTableReady = false;
 
 const datePattern = /^\d{4}-\d{2}-\d{2}$/;
 
@@ -255,6 +256,27 @@ async function hasAppointmentsSourceColumn() {
   return appointmentsSourceColumnCached;
 }
 
+async function ensureReviewsTable() {
+  if (reviewsTableReady) {
+    return;
+  }
+
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS reviews (
+      id BIGSERIAL PRIMARY KEY,
+      name TEXT NOT NULL,
+      rating INTEGER NOT NULL CHECK (rating >= 1 AND rating <= 5),
+      message TEXT NOT NULL,
+      source TEXT NOT NULL DEFAULT 'website',
+      status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'approved', 'rejected')),
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      approved_at TIMESTAMPTZ NULL
+    )
+  `);
+
+  reviewsTableReady = true;
+}
+
 export function createApp() {
   const app = express();
 
@@ -320,6 +342,74 @@ export function createApp() {
     } catch (error) {
       console.error("Failed to fetch site content", error);
       return res.status(500).json({ message: "Failed to fetch site content" });
+    }
+  });
+
+  app.get("/api/reviews", async (_req, res) => {
+    try {
+      await ensureReviewsTable();
+
+      const result = await pool.query<{
+        id: string;
+        name: string;
+        rating: number;
+        message: string;
+        created_at: string;
+      }>(
+        `SELECT id::text, name, rating, message, created_at
+         FROM reviews
+         WHERE status = 'approved'
+         ORDER BY approved_at DESC NULLS LAST, created_at DESC
+         LIMIT 24`,
+      );
+
+      return res.status(200).json({ reviews: result.rows });
+    } catch (error) {
+      console.error("Failed to fetch reviews", error);
+      return res.status(500).json({ message: "Failed to fetch reviews" });
+    }
+  });
+
+  app.post("/api/reviews", async (req, res) => {
+    const body = req.body as {
+      name?: unknown;
+      rating?: unknown;
+      message?: unknown;
+      source?: unknown;
+    };
+
+    const name = typeof body.name === "string" ? body.name.trim().slice(0, 80) : "";
+    const ratingRaw = typeof body.rating === "number" ? body.rating : Number(body.rating);
+    const rating = Number.isFinite(ratingRaw) ? Math.trunc(ratingRaw) : NaN;
+    const message = typeof body.message === "string" ? body.message.trim().slice(0, 500) : "";
+    const source = typeof body.source === "string" && body.source.trim()
+      ? body.source.trim().slice(0, 80)
+      : "website";
+
+    if (!name || !message || Number.isNaN(rating)) {
+      return res.status(400).json({ message: "name, rating and message are required" });
+    }
+
+    if (rating < 1 || rating > 5) {
+      return res.status(400).json({ message: "rating must be between 1 and 5" });
+    }
+
+    try {
+      await ensureReviewsTable();
+
+      await pool.query(
+        `INSERT INTO reviews (name, rating, message, source, status)
+         VALUES ($1, $2, $3, $4, 'pending')`,
+        [name, rating, message, source],
+      );
+
+      return res.status(201).json({
+        success: true,
+        message: "Thank you. Your review has been submitted for approval.",
+      });
+    } catch (error) {
+      console.error("Failed to submit review", error);
+      return res.status(500).json({ message: "Failed to submit review" });
     }
   });
 
@@ -617,6 +707,90 @@ export function createApp() {
     } catch (error) {
       console.error("Failed to fetch admin appointments", error);
       return res.status(500).json({ message: "Failed to fetch appointments" });
+    }
+  });
+
+  app.get("/api/admin/reviews", async (_req, res) => {
+    try {
+      await ensureReviewsTable();
+
+      const result = await pool.query<{
+        id: string;
+        name: string;
+        rating: number;
+        message: string;
+        source: string;
+        status: string;
+        created_at: string;
+      }>(
+        `SELECT id::text, name, rating, message, source, status, created_at
+         FROM reviews
+         ORDER BY created_at DESC
+         LIMIT 200`,
+      );
+
+      return res.status(200).json({ reviews: result.rows });
+    } catch (error) {
+      console.error("Failed to fetch admin reviews", error);
+      return res.status(500).json({ message: "Failed to fetch reviews" });
+    }
+  });
+
+  app.patch("/api/admin/reviews/:id", async (req, res) => {
+    const reviewId = req.params.id.trim();
+    const status = typeof req.body?.status === "string" ? req.body.status.trim() : "";
+
+    if (!/^\d+$/.test(reviewId)) {
+      return res.status(400).json({ message: "Invalid review id" });
+    }
+
+    if (!["pending", "approved", "rejected"].includes(status)) {
+      return res.status(400).json({ message: "Invalid review status" });
+    }
+
+    try {
+      await ensureReviewsTable();
+
+      const result = await pool.query(
+        `UPDATE reviews
+         SET status = $1,
+             approved_at = CASE WHEN $1 = 'approved' THEN NOW() ELSE NULL END
+         WHERE id = $2
+         RETURNING id::text, name, rating, message, source, status, created_at`,
+        [status, Number(reviewId)],
+      );
+
+      if (result.rowCount === 0) {
+        return res.status(404).json({ message: "Review not found" });
+      }
+
+      return res.status(200).json({ review: result.rows[0] });
+    } catch (error) {
+      console.error("Failed to update review", error);
+      return res.status(500).json({ message: "Failed to update review" });
+    }
+  });
+
+  app.delete("/api/admin/reviews/:id", async (req, res) => {
+    const reviewId = req.params.id.trim();
+
+    if (!/^\d+$/.test(reviewId)) {
+      return res.status(400).json({ message: "Invalid review id" });
+    }
+
+    try {
+      await ensureReviewsTable();
+
+      const result = await pool.query("DELETE FROM reviews WHERE id = $1", [Number(reviewId)]);
+
+      if (result.rowCount === 0) {
+        return res.status(404).json({ message: "Review not found" });
+      }
+
+      return res.status(200).json({ success: true });
+    } catch (error) {
+      console.error("Failed to delete review", error);
+      return res.status(500).json({ message: "Failed to delete review" });
     }
   });
 
