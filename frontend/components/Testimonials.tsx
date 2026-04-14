@@ -1,15 +1,24 @@
 "use client";
 
+import { ReviewForm } from "@/components/ReviewForm";
 import { useSiteContent } from "@/components/SiteContentProvider";
-import { useCallback, useRef } from "react";
+import { BASE_URL } from "@/lib/api";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
-function StarRating() {
+type PublicReview = {
+  id: string;
+  name: string;
+  rating: number;
+  message: string;
+};
+
+function StarRating({ rating }: { rating: number }) {
   return (
-    <div className="flex gap-0.5" role="img" aria-label="5 out of 5 stars">
+    <div className="flex gap-0.5" role="img" aria-label={`${rating} out of 5 stars`}>
       {Array.from({ length: 5 }, (_, i) => (
         <svg
           key={i}
-          className="h-5 w-5 shrink-0 text-amber-400"
+          className={`h-5 w-5 shrink-0 ${i < rating ? "text-amber-400" : "text-slate-200"}`}
           fill="currentColor"
           viewBox="0 0 20 20"
           aria-hidden
@@ -23,7 +32,65 @@ function StarRating() {
 
 export function Testimonials() {
   const { content } = useSiteContent();
+  const [approvedReviews, setApprovedReviews] = useState<PublicReview[]>([]);
   const scrollerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const loadReviews = async () => {
+      try {
+        const response = await fetch(`${BASE_URL}/api/reviews`, { cache: "no-store" });
+        const data = (await response.json().catch(() => null)) as { reviews?: unknown } | null;
+
+        if (!response.ok || !Array.isArray(data?.reviews)) {
+          return;
+        }
+
+        const normalized = data.reviews
+          .map((review) => {
+            const id = typeof review?.id === "string" ? review.id : "";
+            const name = typeof review?.name === "string" ? review.name : "";
+            const rating = typeof review?.rating === "number" ? review.rating : Number(review?.rating);
+            const message = typeof review?.message === "string" ? review.message : "";
+
+            if (!id || !name || !message || Number.isNaN(rating)) {
+              return null;
+            }
+
+            return {
+              id,
+              name,
+              rating: Math.max(1, Math.min(5, Math.trunc(rating))),
+              message,
+            };
+          })
+          .filter((review): review is PublicReview => review !== null);
+
+        setApprovedReviews(normalized);
+      } catch {
+        setApprovedReviews([]);
+      }
+    };
+
+    void loadReviews();
+  }, []);
+
+  const reviewsToRender = useMemo(() => {
+    if (approvedReviews.length > 0) {
+      return approvedReviews.map((review) => ({
+        id: review.id,
+        name: review.name,
+        text: review.message,
+        rating: review.rating,
+      }));
+    }
+
+    return content.testimonials.map((item, index) => ({
+      id: `fallback-${index}`,
+      name: item.name,
+      text: item.text,
+      rating: 5,
+    }));
+  }, [approvedReviews, content.testimonials]);
 
   const scrollByDirection = useCallback((direction: "left" | "right") => {
     const el = scrollerRef.current;
@@ -74,9 +141,9 @@ export function Testimonials() {
             ref={scrollerRef}
             className="flex min-w-0 flex-1 snap-x snap-mandatory gap-6 overflow-x-auto scroll-smooth pb-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
           >
-            {content.testimonials.map((item, index) => (
+            {reviewsToRender.map((item) => (
               <article
-                key={`${item.name}-${index}`}
+                key={item.id}
                 data-testimonial-card
                 className="flex w-[min(85vw,320px)] shrink-0 snap-start flex-col rounded-xl border border-slate-200 bg-white p-6 shadow-sm md:w-[calc((100%-3rem)/3.15)]"
               >
@@ -85,7 +152,7 @@ export function Testimonials() {
                   &ldquo;{item.text}&rdquo;
                 </p>
                 <div className="mt-4">
-                  <StarRating />
+                  <StarRating rating={item.rating} />
                 </div>
               </article>
             ))}
@@ -112,6 +179,10 @@ export function Testimonials() {
               />
             </svg>
           </button>
+        </div>
+
+        <div className="mx-auto mt-10 max-w-3xl">
+          <ReviewForm />
         </div>
       </div>
     </div>

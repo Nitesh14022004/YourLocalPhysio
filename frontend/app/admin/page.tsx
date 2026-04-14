@@ -1,6 +1,7 @@
 "use client";
 
 import { AdminInsights } from "@/components/AdminInsights";
+import { AdminReviews } from "@/components/AdminReviews";
 import { AdminTable } from "@/components/AdminTable";
 import { Navbar } from "@/components/Navbar";
 import { SiteContentEditor } from "@/components/SiteContentEditor";
@@ -77,6 +78,8 @@ export default function AdminPage() {
           <SiteContentEditor />
 
           <AdminInsights />
+
+          <AdminReviews />
 
           <AdminTable />
         </div>
