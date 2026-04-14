@@ -1,7 +1,14 @@
 const configuredBaseUrl = process.env.NEXT_PUBLIC_API_URL?.trim() || "";
+const localRuntimeFallback =
+  typeof window !== "undefined" && /^(localhost|127\.0\.0\.1)$/i.test(window.location.hostname)
+    ? "http://localhost:5000"
+    : "";
+const resolvedBaseUrl = configuredBaseUrl || localRuntimeFallback;
 export const BASE_URL = configuredBaseUrl.endsWith("/")
   ? configuredBaseUrl.slice(0, -1)
-  : configuredBaseUrl;
+  : resolvedBaseUrl.endsWith("/")
+    ? resolvedBaseUrl.slice(0, -1)
+    : resolvedBaseUrl;
 
 type ApiFetchOptions = RequestInit & {
   skipUnauthorizedRedirect?: boolean;
