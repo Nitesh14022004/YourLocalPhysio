@@ -793,6 +793,8 @@ export function createApp() {
       return res.status(500).json({ message: "Failed to update review" });
     }
   });
+
+  app.delete("/api/admin/reviews/:id", async (req, res) => {
     const reviewId = req.params.id.trim();
 
     if (!/^\d+$/.test(reviewId)) {
