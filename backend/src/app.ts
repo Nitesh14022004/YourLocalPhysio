@@ -284,10 +284,13 @@ async function ensureReviewsTable() {
 export function createApp() {
   const app = express();
 
+  const normalizeOrigin = (value: string) => value.trim().replace(/\/+$/, "");
+
   const configuredOrigins = (process.env.CORS_ORIGIN ?? "")
     .split(",")
-    .map((origin) => origin.trim())
+    .map((origin) => normalizeOrigin(origin))
     .filter(Boolean);
+  const configuredOriginSet = new Set(configuredOrigins);
   const allowVercelPreviewDomains = process.env.ALLOW_VERCEL_PREVIEW_DOMAINS === "true";
 
   app.use(
@@ -298,11 +301,13 @@ export function createApp() {
           return callback(null, true);
         }
 
+        const normalizedOrigin = normalizeOrigin(origin);
+
         if (configuredOrigins.length === 0 && process.env.NODE_ENV !== "production") {
           return callback(null, true);
         }
 
-        if (configuredOrigins.includes(origin)) {
+        if (configuredOriginSet.has(normalizedOrigin)) {
           return callback(null, true);
         }
 

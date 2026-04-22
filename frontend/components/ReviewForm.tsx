@@ -68,7 +68,7 @@ export function ReviewForm() {
             type="text"
             value={name}
             onChange={(event) => setName(event.target.value)}
-            className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+            className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm text-black placeholder:text-black outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
             placeholder="Your name"
             required
           />
@@ -82,7 +82,7 @@ export function ReviewForm() {
             id="review-rating"
             value={rating}
             onChange={(event) => setRating(Number(event.target.value))}
-            className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+            className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm text-black outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
           >
             {[5, 4, 3, 2, 1].map((value) => (
               <option key={value} value={value}>
@@ -101,7 +101,7 @@ export function ReviewForm() {
             rows={4}
             value={message}
             onChange={(event) => setMessage(event.target.value)}
-            className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+            className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm text-black placeholder:text-black outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
             placeholder="Tell others about your treatment experience"
             required
           />
