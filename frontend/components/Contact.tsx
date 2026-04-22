@@ -8,9 +8,9 @@ export function Contact() {
   const { content } = useSiteContent();
 
   return (
-    <section className="animate-fade-in-section bg-gradient-to-b from-sky-50/60 to-white py-16 md:py-24">
-      <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-2xl rounded-3xl border border-sky-100 bg-white p-6 shadow-lg shadow-slate-200/60 sm:p-8 md:p-10">
+    <section className="home-section home-contact animate-fade-in-section bg-gradient-to-b from-sky-50/60 to-white py-16 md:py-24">
+      <div className="home-section-inner mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-2xl rounded-3xl border border-sky-100 bg-white p-5 shadow-lg shadow-slate-200/60 sm:p-8 md:p-10">
           <div className="text-center">
             <p className="text-sm font-semibold uppercase tracking-[0.2em] text-blue-700">
               Contact
@@ -24,13 +24,13 @@ export function Contact() {
             </p>
           </div>
 
-          <div className="mt-8 grid gap-4 sm:grid-cols-2">
+          <div className="home-contact-actions mt-8 grid gap-4 sm:grid-cols-2">
             <a
               href={`tel:${content.primaryPhone}`}
               onClick={() => {
                 trackEvent("click_to_call", { location: "contact", phone: content.primaryPhone });
               }}
-              className="hover-lift inline-flex items-center justify-center rounded-xl border border-blue-200 bg-blue-50 px-4 py-3 text-sm font-semibold text-blue-800 transition hover:bg-blue-100"
+              className="hover-lift inline-flex w-full items-center justify-center rounded-xl border border-blue-200 bg-blue-50 px-4 py-3 text-sm font-semibold text-blue-800 transition hover:bg-blue-100"
             >
               Call: {content.primaryPhone}
             </a>
@@ -42,7 +42,7 @@ export function Contact() {
               onClick={() => {
                 trackEvent("whatsapp_click", { location: "contact", number: content.whatsappNumber });
               }}
-              className="hover-lift inline-flex items-center justify-center rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-semibold text-emerald-800 transition hover:bg-emerald-100"
+              className="hover-lift inline-flex w-full items-center justify-center rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-semibold text-emerald-800 transition hover:bg-emerald-100"
             >
               Chat on WhatsApp
             </a>

@@ -105,8 +105,8 @@ export function Testimonials() {
   }, []);
 
   return (
-    <div className="animate-fade-in-section bg-gradient-to-b from-white to-sky-50/40 py-16 md:py-20">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div className="home-section home-testimonials animate-fade-in-section bg-gradient-to-b from-white to-sky-50/40 py-16 md:py-20">
+      <div className="home-section-inner mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <h2 className="text-center text-3xl font-bold text-slate-900 md:text-4xl">
           Testimonials
         </h2>
@@ -114,7 +114,7 @@ export function Testimonials() {
           What our patients say about care at home.
         </p>
 
-        <div className="mt-12 flex items-center gap-3">
+        <div className="home-testimonials-row mt-10 flex items-center gap-3 sm:mt-12 sm:gap-4">
           <button
             type="button"
             className="hidden h-11 w-11 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 shadow-sm transition hover:bg-slate-50 hover:text-slate-900 md:flex"
@@ -139,13 +139,13 @@ export function Testimonials() {
 
           <div
             ref={scrollerRef}
-            className="flex min-w-0 flex-1 snap-x snap-mandatory gap-6 overflow-x-auto scroll-smooth pb-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+            className="home-testimonials-scroller flex min-w-0 flex-1 snap-x snap-mandatory gap-5 overflow-x-auto scroll-smooth pb-2 sm:gap-6 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
           >
             {reviewsToRender.map((item) => (
               <article
                 key={item.id}
                 data-testimonial-card
-                className="flex w-[min(85vw,320px)] shrink-0 snap-start flex-col rounded-xl border border-slate-200 bg-white p-6 shadow-sm md:w-[calc((100%-3rem)/3.15)]"
+                className="flex w-[min(82vw,320px)] shrink-0 snap-start flex-col rounded-xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6 md:w-[calc((100%-3rem)/3.15)]"
               >
                 <p className="text-sm font-semibold text-slate-900">{item.name}</p>
                 <p className="mt-3 flex-1 text-sm leading-relaxed text-slate-600">

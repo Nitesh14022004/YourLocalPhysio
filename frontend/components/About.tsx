@@ -1,8 +1,8 @@
 export function About() {
   return (
-    <section className="bg-gradient-to-b from-white to-sky-50/50 py-16 md:py-24">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
+    <section className="home-section home-about bg-gradient-to-b from-white to-sky-50/50 py-16 md:py-24">
+      <div className="home-section-inner mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="home-about-grid grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
           <div className="order-2 lg:order-1">
             <div
               className="flex aspect-[4/3] w-full items-center justify-center rounded-3xl border border-sky-100 bg-gradient-to-br from-sky-50 via-white to-blue-100 p-6 shadow-sm"

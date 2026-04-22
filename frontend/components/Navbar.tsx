@@ -23,8 +23,8 @@ export function Navbar() {
   }, []);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-slate-200/80 bg-white/95 shadow-sm backdrop-blur supports-[backdrop-filter]:bg-white/80">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
+    <header className="home-navbar sticky top-0 z-50 border-b border-slate-200/80 bg-white/95 shadow-sm backdrop-blur supports-[backdrop-filter]:bg-white/80">
+      <div className="home-navbar-inner mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 md:h-[4.5rem] lg:px-8">
         <Link
           href="#home"
           className="flex shrink-0 items-center gap-2 text-lg font-semibold tracking-tight text-slate-900"
@@ -127,7 +127,7 @@ export function Navbar() {
 
       <div
         id="mobile-menu"
-        className={`border-t border-slate-200 bg-white md:hidden ${open ? "block" : "hidden"}`}
+        className={`home-navbar-mobile border-t border-slate-200 bg-white md:hidden ${open ? "block" : "hidden"}`}
       >
         <nav
           className="mx-auto flex max-w-7xl flex-col gap-1 px-4 py-4 sm:px-6"

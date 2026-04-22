@@ -28,8 +28,8 @@ const services = [
 
 export function Services() {
   return (
-    <div className="animate-fade-in-section bg-white py-16 md:py-20">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div className="home-section home-services animate-fade-in-section bg-white py-16 md:py-20">
+      <div className="home-section-inner mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <h2 className="text-center text-3xl font-bold text-slate-900 md:text-4xl">
           Our Services
         </h2>
@@ -37,7 +37,7 @@ export function Services() {
           Personalized physiotherapy treatments delivered at your home.
         </p>
 
-        <ul className="mt-12 grid list-none gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <ul className="home-services-grid mt-12 grid list-none gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3 lg:gap-8">
           {services.map((item) => (
             <li key={item.title} className="h-full">
               <article className="flex h-full flex-col rounded-xl border border-slate-200 bg-sky-50/40 p-6 shadow-sm transition-[transform,box-shadow] duration-200 ease-out hover:-translate-y-1 hover:shadow-[0_10px_25px_rgba(0,0,0,0.08)] motion-reduce:transition-none motion-reduce:hover:translate-y-0 motion-reduce:hover:shadow-sm">

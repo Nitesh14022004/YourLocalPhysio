@@ -41,6 +41,10 @@ function isValidUuid(value: string) {
   );
 }
 
+function isValidAppointmentId(value: string) {
+  return isValidUuid(value) || /^\d+$/.test(value);
+}
+
 function requireAdminAuth(req: express.Request, res: express.Response, next: express.NextFunction) {
   const token = req.headers.authorization?.split(" ")[1];
 
@@ -798,7 +802,7 @@ export function createApp() {
     const appointmentId = req.params.id.trim();
     const nextStatus = typeof req.body?.status === "string" ? req.body.status.trim() : "";
 
-    if (!isValidUuid(appointmentId)) {
+    if (!isValidAppointmentId(appointmentId)) {
       return res.status(400).json({ message: "Invalid appointment id" });
     }
 
@@ -833,7 +837,7 @@ export function createApp() {
   app.delete("/api/admin/appointments/:id", async (req, res) => {
     const appointmentId = req.params.id.trim();
 
-    if (!isValidUuid(appointmentId)) {
+    if (!isValidAppointmentId(appointmentId)) {
       return res.status(400).json({ message: "Invalid appointment id" });
     }
 

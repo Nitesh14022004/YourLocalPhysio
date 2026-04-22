@@ -10,24 +10,24 @@ export default function Home() {
   return (
     <>
       <Navbar />
-      <main>
-        <section id="home" className="scroll-mt-16">
+      <main className="overflow-x-clip">
+        <section id="home" className="scroll-mt-20 sm:scroll-mt-24">
           <Hero />
         </section>
 
-        <section id="services" className="scroll-mt-16">
+        <section id="services" className="scroll-mt-20 sm:scroll-mt-24">
           <Services />
         </section>
-        <section id="how-it-works" className="scroll-mt-16">
+        <section id="how-it-works" className="scroll-mt-20 sm:scroll-mt-24">
           <HowItWorks />
         </section>
-        <section id="about" className="scroll-mt-16">
+        <section id="about" className="scroll-mt-20 sm:scroll-mt-24">
           <About />
         </section>
-        <section id="testimonials" className="scroll-mt-16">
+        <section id="testimonials" className="scroll-mt-20 sm:scroll-mt-24">
           <Testimonials />
         </section>
-        <section id="contact" className="scroll-mt-16">
+        <section id="contact" className="scroll-mt-20 sm:scroll-mt-24">
           <Contact />
         </section>
       </main>

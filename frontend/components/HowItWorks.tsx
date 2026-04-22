@@ -86,8 +86,8 @@ const steps = [
 
 export function HowItWorks() {
   return (
-    <div className="animate-fade-in-section bg-gradient-to-b from-sky-50/80 to-white py-16 md:py-20">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div className="home-section home-how-it-works animate-fade-in-section bg-gradient-to-b from-sky-50/80 to-white py-16 md:py-20">
+      <div className="home-section-inner mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <h2 className="text-center text-3xl font-bold text-slate-900 md:text-4xl">
           How it works
         </h2>
@@ -95,12 +95,12 @@ export function HowItWorks() {
           Four simple steps from booking to feeling better at home.
         </p>
 
-        <div className="relative mt-12">
+        <div className="home-steps-panel relative mt-10 sm:mt-12">
           <div
             className="pointer-events-none absolute left-[12.5%] right-[12.5%] top-[28px] z-0 hidden h-px bg-slate-200 md:block"
             aria-hidden
           />
-          <ol className="relative z-10 grid list-none grid-cols-1 gap-10 md:grid-cols-4 md:gap-6 lg:gap-8">
+          <ol className="home-steps-grid relative z-10 grid list-none grid-cols-1 gap-8 sm:gap-10 md:grid-cols-4 md:gap-6 lg:gap-8">
             {steps.map((step, index) => (
               <li
                 key={step.title}

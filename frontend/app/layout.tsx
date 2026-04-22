@@ -28,7 +28,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${bodyFont.variable} ${headingFont.variable} min-h-screen bg-white antialiased text-slate-900`}>
+      <body className={`${bodyFont.variable} ${headingFont.variable} min-h-screen overflow-x-hidden bg-white antialiased text-slate-900`}>
         <AnalyticsScripts />
         <SiteContentProvider>{children}</SiteContentProvider>
       </body>

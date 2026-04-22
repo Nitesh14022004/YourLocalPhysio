@@ -8,25 +8,25 @@ export function Hero() {
   const { content } = useSiteContent();
 
   return (
-    <section className="animate-fade-in-section relative overflow-hidden bg-gradient-to-b from-sky-50 to-white">
+    <section className="home-section home-hero animate-fade-in-section relative overflow-hidden bg-gradient-to-b from-sky-50 to-white">
       <div className="pointer-events-none absolute -left-24 top-8 h-64 w-64 rounded-full bg-blue-200/30 blur-3xl" />
       <div className="pointer-events-none absolute -right-20 bottom-8 h-56 w-56 rounded-full bg-emerald-200/30 blur-3xl" />
-      <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
-        <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
+      <div className="home-section-inner mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
+        <div className="home-hero-grid grid items-center gap-8 sm:gap-12 lg:grid-cols-2 lg:gap-16">
           <div className="text-center lg:text-left">
-            <h1 className="text-balance text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl lg:text-5xl">
+            <h1 className="text-balance text-3xl font-bold tracking-tight text-slate-900 sm:text-[2.7rem] lg:text-5xl">
               {content.heroTitle}
             </h1>
-            <p className="mx-auto mt-5 max-w-xl text-lg leading-relaxed text-slate-600 lg:mx-0 lg:text-xl">
+            <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-slate-600 sm:text-lg lg:mx-0 lg:text-xl">
               {content.heroSubtitle}
             </p>
-            <div className="mt-8 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:justify-center lg:justify-start">
+            <div className="mt-7 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:justify-center lg:justify-start">
               <Link
                 href="/book"
                 onClick={() => {
                   trackEvent("book_cta_click", { location: "hero" });
                 }}
-                className="hover-lift inline-flex items-center justify-center rounded-lg bg-blue-600 px-6 py-3.5 text-base font-semibold text-white shadow-md transition-colors hover:bg-blue-700"
+                className="hover-lift inline-flex items-center justify-center rounded-lg bg-blue-600 px-6 py-3.5 text-sm font-semibold text-white shadow-md transition-colors hover:bg-blue-700 sm:text-base"
               >
                 Book Appointment
               </Link>
@@ -35,7 +35,7 @@ export function Hero() {
                 onClick={() => {
                   trackEvent("click_to_call", { location: "hero", phone: content.primaryPhone });
                 }}
-                className="hover-lift inline-flex items-center justify-center rounded-lg border-2 border-blue-600 bg-white px-6 py-3.5 text-base font-semibold text-blue-700 transition-colors hover:bg-blue-50"
+                className="hover-lift inline-flex items-center justify-center rounded-lg border-2 border-blue-600 bg-white px-6 py-3.5 text-sm font-semibold text-blue-700 transition-colors hover:bg-blue-50 sm:text-base"
               >
                 Call: {content.primaryPhone}
               </a>
