@@ -154,69 +154,10 @@ export function SiteContentEditor() {
         </label>
       </div>
 
-      <div className="mt-8 space-y-3">
-        <div className="flex items-center justify-between">
-          <h3 className="text-lg font-semibold text-slate-900">Testimonials</h3>
-          <button
-            type="button"
-            onClick={() =>
-              updateField("testimonials", [
-                ...form.testimonials,
-                { name: "", text: "" },
-              ])
-            }
-            className="rounded-lg border border-slate-300 px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
-          >
-            Add Testimonial
-          </button>
-        </div>
-
-        <div className="space-y-4">
-          {form.testimonials.map((item, index) => (
-            <div key={`testimonial-${index}`} className="rounded-xl border border-slate-200 p-4">
-              <div className="mb-3 flex items-center justify-between">
-                <p className="text-sm font-semibold text-slate-700">Testimonial {index + 1}</p>
-                <button
-                  type="button"
-                  onClick={() =>
-                    updateField(
-                      "testimonials",
-                      form.testimonials.filter((_, i) => i !== index),
-                    )
-                  }
-                  className="text-xs font-semibold text-red-600 hover:text-red-700"
-                >
-                  Remove
-                </button>
-              </div>
-
-              <div className="grid gap-3 md:grid-cols-2">
-                <input
-                  value={item.name}
-                  onChange={(e) => {
-                    const next = [...form.testimonials];
-                    next[index] = { ...item, name: e.target.value };
-                    updateField("testimonials", next);
-                  }}
-                  placeholder="Client name"
-                  className="rounded-lg border border-slate-300 px-3 py-2 text-sm text-black placeholder:text-black"
-                />
-
-                <textarea
-                  value={item.text}
-                  onChange={(e) => {
-                    const next = [...form.testimonials];
-                    next[index] = { ...item, text: e.target.value };
-                    updateField("testimonials", next);
-                  }}
-                  placeholder="Testimonial text"
-                  rows={2}
-                  className="rounded-lg border border-slate-300 px-3 py-2 text-sm text-black placeholder:text-black md:col-span-1"
-                />
-              </div>
-            </div>
-          ))}
-        </div>
+      <div className="mt-8 rounded-lg border border-blue-200 bg-blue-50 p-4">
+        <p className="text-sm text-blue-700">
+          <strong>Note:</strong> Reviews are now managed in the Patient Reviews section. Customers can submit reviews directly from the booking page, and you can edit or delete them from the admin panel.
+        </p>
       </div>
 
       {error ? <p className="mt-4 text-sm text-red-600">{error}</p> : null}

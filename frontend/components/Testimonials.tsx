@@ -74,23 +74,16 @@ export function Testimonials() {
     void loadReviews();
   }, []);
 
-  const reviewsToRender = useMemo(() => {
-    if (approvedReviews.length > 0) {
-      return approvedReviews.map((review) => ({
+  const reviewsToRender = useMemo(
+    () =>
+      approvedReviews.map((review) => ({
         id: review.id,
         name: review.name,
         text: review.message,
         rating: review.rating,
-      }));
-    }
-
-    return content.testimonials.map((item, index) => ({
-      id: `fallback-${index}`,
-      name: item.name,
-      text: item.text,
-      rating: 5,
-    }));
-  }, [approvedReviews, content.testimonials]);
+      })),
+    [approvedReviews],
+  );
 
   const scrollByDirection = useCallback((direction: "left" | "right") => {
     const el = scrollerRef.current;
@@ -114,34 +107,39 @@ export function Testimonials() {
           What our patients say about care at home.
         </p>
 
-        <div className="home-testimonials-row mt-10 flex items-center gap-3 sm:mt-12 sm:gap-4">
-          <button
-            type="button"
-            className="hidden h-11 w-11 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 shadow-sm transition hover:bg-slate-50 hover:text-slate-900 md:flex"
-            aria-label="Scroll testimonials left"
-            onClick={() => scrollByDirection("left")}
-          >
-            <svg
-              className="h-5 w-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={2}
-              aria-hidden
+        {reviewsToRender.length === 0 ? (
+          <div className="py-12 text-center">
+            <p className="text-slate-500">No reviews yet. Be the first to share your experience!</p>
+          </div>
+        ) : (
+          <div className="home-testimonials-row mt-10 flex items-center gap-3 sm:mt-12 sm:gap-4">
+            <button
+              type="button"
+              className="hidden h-11 w-11 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 shadow-sm transition hover:bg-slate-50 hover:text-slate-900 md:flex"
+              aria-label="Scroll testimonials left"
+              onClick={() => scrollByDirection("left")}
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M15 19l-7-7 7-7"
-              />
-            </svg>
-          </button>
+              <svg
+                className="h-5 w-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2}
+                aria-hidden
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M15 19l-7-7 7-7"
+                />
+              </svg>
+            </button>
 
-          <div
-            ref={scrollerRef}
-            className="home-testimonials-scroller flex min-w-0 flex-1 snap-x snap-mandatory gap-5 overflow-x-auto scroll-smooth pb-2 sm:gap-6 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-          >
-            {reviewsToRender.map((item) => (
+            <div
+              ref={scrollerRef}
+              className="home-testimonials-scroller flex min-w-0 flex-1 snap-x snap-mandatory gap-5 overflow-x-auto scroll-smooth pb-2 sm:gap-6 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+            >
+              {reviewsToRender.map((item) => (
               <article
                 key={item.id}
                 data-testimonial-card
@@ -180,6 +178,7 @@ export function Testimonials() {
             </svg>
           </button>
         </div>
+        )}
 
         <div className="mx-auto mt-10 max-w-3xl">
           <ReviewForm />

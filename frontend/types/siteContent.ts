@@ -1,8 +1,3 @@
-export type Testimonial = {
-  name: string;
-  text: string;
-};
-
 export type SiteContent = {
   siteName: string;
   logoText: string;
@@ -12,5 +7,4 @@ export type SiteContent = {
   primaryPhone: string;
   whatsappNumber: string;
   serviceArea: string;
-  testimonials: Testimonial[];
 };
