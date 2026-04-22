@@ -729,10 +729,9 @@ export function createApp() {
         rating: number;
         message: string;
         source: string;
-        status: string;
         created_at: string;
       }>(
-        `SELECT id::text, name, rating, message, source, status, created_at
+        `SELECT id::text, name, rating, message, source, created_at
          FROM reviews
          ORDER BY created_at DESC
          LIMIT 200`,
