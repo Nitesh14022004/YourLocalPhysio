@@ -85,7 +85,7 @@ export function SiteContentEditor() {
           <input
             value={form.siteName}
             onChange={(e) => updateField("siteName", e.target.value)}
-            className="w-full rounded-lg border border-slate-300 px-3 py-2"
+            className="w-full rounded-lg border border-slate-300 px-3 py-2 text-black placeholder:text-black"
           />
         </label>
 
@@ -94,7 +94,7 @@ export function SiteContentEditor() {
           <input
             value={form.logoText}
             onChange={(e) => updateField("logoText", e.target.value)}
-            className="w-full rounded-lg border border-slate-300 px-3 py-2"
+            className="w-full rounded-lg border border-slate-300 px-3 py-2 text-black placeholder:text-black"
           />
         </label>
 
@@ -103,7 +103,7 @@ export function SiteContentEditor() {
           <input
             value={form.logoImageUrl}
             onChange={(e) => updateField("logoImageUrl", e.target.value)}
-            className="w-full rounded-lg border border-slate-300 px-3 py-2"
+            className="w-full rounded-lg border border-slate-300 px-3 py-2 text-black placeholder:text-black"
             placeholder="https://..."
           />
         </label>
@@ -113,7 +113,7 @@ export function SiteContentEditor() {
           <input
             value={form.heroTitle}
             onChange={(e) => updateField("heroTitle", e.target.value)}
-            className="w-full rounded-lg border border-slate-300 px-3 py-2"
+            className="w-full rounded-lg border border-slate-300 px-3 py-2 text-black placeholder:text-black"
           />
         </label>
 
@@ -122,7 +122,7 @@ export function SiteContentEditor() {
           <input
             value={form.heroSubtitle}
             onChange={(e) => updateField("heroSubtitle", e.target.value)}
-            className="w-full rounded-lg border border-slate-300 px-3 py-2"
+            className="w-full rounded-lg border border-slate-300 px-3 py-2 text-black placeholder:text-black"
           />
         </label>
 
@@ -131,7 +131,7 @@ export function SiteContentEditor() {
           <input
             value={form.primaryPhone}
             onChange={(e) => updateField("primaryPhone", e.target.value)}
-            className="w-full rounded-lg border border-slate-300 px-3 py-2"
+            className="w-full rounded-lg border border-slate-300 px-3 py-2 text-black placeholder:text-black"
           />
         </label>
 
@@ -140,7 +140,7 @@ export function SiteContentEditor() {
           <input
             value={form.whatsappNumber}
             onChange={(e) => updateField("whatsappNumber", e.target.value)}
-            className="w-full rounded-lg border border-slate-300 px-3 py-2"
+            className="w-full rounded-lg border border-slate-300 px-3 py-2 text-black placeholder:text-black"
           />
         </label>
 
@@ -149,7 +149,7 @@ export function SiteContentEditor() {
           <input
             value={form.serviceArea}
             onChange={(e) => updateField("serviceArea", e.target.value)}
-            className="w-full rounded-lg border border-slate-300 px-3 py-2"
+            className="w-full rounded-lg border border-slate-300 px-3 py-2 text-black placeholder:text-black"
           />
         </label>
       </div>
@@ -199,7 +199,7 @@ export function SiteContentEditor() {
                     updateField("testimonials", next);
                   }}
                   placeholder="Client name"
-                  className="rounded-lg border border-slate-300 px-3 py-2 text-sm"
+                  className="rounded-lg border border-slate-300 px-3 py-2 text-sm text-black placeholder:text-black"
                 />
 
                 <textarea
@@ -211,7 +211,7 @@ export function SiteContentEditor() {
                   }}
                   placeholder="Testimonial text"
                   rows={2}
-                  className="rounded-lg border border-slate-300 px-3 py-2 text-sm md:col-span-1"
+                  className="rounded-lg border border-slate-300 px-3 py-2 text-sm text-black placeholder:text-black md:col-span-1"
                 />
               </div>
             </div>
